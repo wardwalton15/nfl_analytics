@@ -91,6 +91,7 @@ pbp_2024 %>%
     subtitle = "By Pct of Targets that Resulted in a First Down (Min 25 Third Down Targets)"
   ) %>% cols_label( 
     receiver_player_name = "Player",
+    posteam = "Team",
     targets = "Targets",
     receptions = "Receptions",
     first_downs = "First Downs",
