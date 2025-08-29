@@ -8,12 +8,37 @@ library(tidyverse)
 library(nflfastR)
 library(gt)
 
-#which team in 2024 passed the most on first down? (when game was in a competitive state)
 pbp_2024 <- load_pbp(2024)
 colors <- nflfastR::teams_colors_logos
 
 pbp_2024 <- pbp_2024 %>%
   left_join(colors, by = c("posteam" = "team_abbr"))
+
+#pass_pct by win probability 
+pbp_2024 %>%
+  filter((rush == 1 | pass == 1)) %>%
+  group_by(wp_bin = cut(wp, breaks = seq(0, 1, by = 0.1), include.lowest = TRUE)) %>%
+  summarise(
+    plays = n(),
+    pass_plays = sum(pass == 1, na.rm = TRUE),
+    pass_pct = round(100 * mean(pass == 1, na.rm = TRUE), 1),
+    .groups = "drop"
+  ) %>%
+  ggplot(aes(x = wp_bin,
+   y = pass_pct,
+    group = 1)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Pass Rate by Win Probability in 2024",
+    caption = "Data: @nflfastR | Plot: Ward Walton",
+    x = "Win Probability Bin",
+    y = "Pass Rate (%)"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+#which team in 2024 passed the most on first down? (when game was in a competitive state)
 
 pbp_2024 %>%
   filter(
@@ -36,11 +61,35 @@ pbp_2024 %>%
   ggplot(aes(x = pass_pct, y = epa)) +
   geom_nfl_logos(aes(team_abbr = posteam, width = 0.075)) +
 labs(
-  title = "First Down EPA vs Pass Rate in 2024 (when Win Probability between 10% and 90%)",
+  title = "First Down EPA vs Pass Rate in 2024 (When Win Probability between 10% and 90%)",
   caption = "Data: @nflfastR | Plot: Ward Walton",
-  xlab = "Percentage of First Down Plays that were Passes",
-  ylab = "Average EPA per Play"
+  x = "Percentage of First Down Plays that were Passes",
+  y = "Average EPA per Play"
 )
+
+#team who pass most compared to expectation in 2024
+pbp_2024 %>%
+  filter(wp > 0.1 & wp < 0.9 & (pass == 1 | rush == 1)) %>%
+  group_by(posteam) %>%
+  summarise(
+    pass_exp = round(100*mean(xpass, na.rm = TRUE),1),
+    pass_rate = round(100*mean(pass, na.rm = TRUE),1),
+    pass_oe = pass_rate - pass_exp,
+    .groups = "drop"
+  ) %>%
+  arrange(desc(pass_oe)) %>%
+  slice_head(n = 10) %>%
+  gt() %>%
+  tab_header(
+    title = "Highest Pass Rate Over Expected in 2024 (When Win Probability between 10% and 90%)",
+  ) %>%
+  cols_label(
+    posteam = "Team",
+    pass_exp = "Expected",
+    pass_rate = "Actual",
+    pass_oe = "Pass Over Expected"  ) %>%
+  gt_nfl_logos(columns = posteam)
+
 
 #team first down epa vs third down epa
 pbp_2024 %>%
@@ -65,7 +114,7 @@ pbp_2024 %>%
   ggplot(aes(x = down_1, y = down_3)) +
   geom_nfl_logos(aes(team_abbr = posteam, width = 0.075)) +
   labs(
-    title = "First Down EPA vs Third Down EPA in 2024 (when Win Probability between 10% and 90%)",
+    title = "First Down EPA vs Third Down EPA in 2024 (When Win Probability between 10% and 90%)",
     caption = "Data: @nflfastR | Plot: Ward Walton",
     xlab = "Average EPA per Play on First Down",
     ylab = "Average EPA per Play on Third Down"
@@ -125,7 +174,6 @@ pbp_2024 %>%
     ypr = "Yards Per Target"
   ) %>%
   gt_nfl_logos(columns = "posteam")
-
 
 
 
