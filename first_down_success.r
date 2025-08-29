@@ -37,6 +37,55 @@ pbp_2024 %>%
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+  #% of pass plays with completion - 54.2%
+pbp_2024 %>%
+  filter(pass == 1) %>%
+  summarise(
+    attempts = n(),
+    completions = sum(complete_pass == 1, na.rm = TRUE),
+    comp_pct = round(100 * mean(complete_pass == 1, na.rm = TRUE), 1)
+  )
+
+  #pct of time you gain 5+ yards by pass vs run
+pbp_2024 %>%
+  filter((rush == 1 | pass == 1)) %>%
+  mutate(play_type = factor(pass, labels = c("Run", "Pass"))) %>%
+  group_by(play_type) %>%
+  summarise(
+    plays = n(),
+    gain_5_plus = sum(yards_gained >= 5, na.rm = TRUE),
+    pct_5_plus = round(100 * mean(yards_gained >= 5, na.rm = TRUE), 1),
+    .groups = "drop"
+  ) %>%
+  gt() %>%
+  tab_header(
+    title = "Percentage Gaining 5+ Yards in 2024",
+    subtitle = "By Play Type"
+  ) %>%
+  cols_label(
+    play_type = "Play Type",
+    plays = "Total Plays",
+    gain_5_plus = "Plays Gaining 5+",
+    pct_5_plus = "Pct Gaining 5+"
+  )
+
+#distribution of yards gained- pass vs run(violin plot)
+pbp_2024 %>%
+  filter((rush == 1 | pass == 1)) %>%
+  mutate(play_type = factor(pass, labels = c("Run", "Pass"))) %>%
+  ggplot(aes(x = play_type, y = yards_gained, fill = play_type)) +
+  geom_violin(trim = FALSE) +
+  geom_boxplot(width = 0.1, position = position_dodge(0.9), outlier.shape = NA) +
+  coord_cartesian(ylim = c(-10, 30)) +
+  labs(
+    title = "Distribution of Yards Gained in 2024",
+    caption = "Data: @nflfastR | Plot: Ward Walton",
+    x = "Play Type",
+    y = "Yards Gained"
+  ) +
+  theme(legend.position = "none")
+
+
 
 #which team in 2024 passed the most on first down? (when game was in a competitive state)
 
@@ -64,32 +113,8 @@ labs(
   title = "First Down EPA vs Pass Rate in 2024 (When Win Probability between 10% and 90%)",
   caption = "Data: @nflfastR | Plot: Ward Walton",
   x = "Percentage of First Down Plays that were Passes",
-  y = "Average EPA per Play"
+  y = "Average First Down EPA per Play"
 )
-
-#team who pass most compared to expectation in 2024
-pbp_2024 %>%
-  filter(wp > 0.1 & wp < 0.9 & (pass == 1 | rush == 1)) %>%
-  group_by(posteam) %>%
-  summarise(
-    pass_exp = round(100*mean(xpass, na.rm = TRUE),1),
-    pass_rate = round(100*mean(pass, na.rm = TRUE),1),
-    pass_oe = pass_rate - pass_exp,
-    .groups = "drop"
-  ) %>%
-  arrange(desc(pass_oe)) %>%
-  slice_head(n = 10) %>%
-  gt() %>%
-  tab_header(
-    title = "Highest Pass Rate Over Expected in 2024 (When Win Probability between 10% and 90%)",
-  ) %>%
-  cols_label(
-    posteam = "Team",
-    pass_exp = "Expected",
-    pass_rate = "Actual",
-    pass_oe = "Pass Over Expected"  ) %>%
-  gt_nfl_logos(columns = posteam)
-
 
 #team first down epa vs third down epa
 pbp_2024 %>%
@@ -147,33 +172,3 @@ pbp_2024 %>%
     first_down_pct = "First Down %",
   ) %>%
   gt_nfl_logos(columns = "posteam")
-
-#yards per target
-pbp_2024 %>%
-  filter(pass == 1 & !is.na(receiver_player_name)) %>%
-  group_by(receiver_player_name, posteam) %>%
-  summarise(
-    routes = n(),
-    yards = sum(yards_gained, na.rm = TRUE),
-    ypr = round(yards / routes, 2),
-    .groups = "drop"
-  ) %>%
-  arrange(desc(ypr)) %>%
-  filter(routes >= 50) %>%
-  slice_head(n = 10) %>%
-  gt() %>%
-  tab_header(
-    title = "Top Yards Per Target in 2024",
-    subtitle = "Min 50 Targets"
-  ) %>%
-  cols_label(
-    receiver_player_name = "Player",
-    posteam = "Team",
-    routes = "Targets",
-    yards = "Yards",
-    ypr = "Yards Per Target"
-  ) %>%
-  gt_nfl_logos(columns = "posteam")
-
-
-
