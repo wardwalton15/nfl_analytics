@@ -75,7 +75,7 @@ pbp_2024 %>%
 #most efficient third down targets in 2024 (min 25 targets)
 pbp_2024 %>%
   filter(down == 3 & (rush == 1 | pass == 1) & !is.na(receiver_player_name)) %>% 
-  group_by(receiver_player_name,posteam) %>%
+  group_by(receiver_player_name, posteam) %>%
   summarise(
     targets = sum(pass == 1, na.rm = TRUE),
     receptions = sum(complete_pass == 1, na.rm = TRUE),
@@ -83,14 +83,14 @@ pbp_2024 %>%
     first_down_pct = round(100*(first_downs / targets), 1),
     .groups = "drop"
   ) %>% arrange(desc(first_down_pct)) %>%
-  filter(targets >= 25)%>%
-  slice_head(n = 10) %>% 
+  filter(targets >= 25) %>%
+  slice_head(n = 10) %>%
   gt() %>%
   tab_header(
     title = "Top Third Down Targets in 2024",
     subtitle = "By Pct of Targets that Resulted in a First Down (Min 25 Third Down Targets)"
-  ) %>% cols_label( 
-    receiver_player_name = "Player",
+  ) %>% 
+  cols_label(receiver_player_name = "Player",
     posteam = "Team",
     targets = "Targets",
     receptions = "Receptions",
@@ -119,6 +119,7 @@ pbp_2024 %>%
   ) %>%
   cols_label(
     receiver_player_name = "Player",
+    posteam = "Team",
     routes = "Targets",
     yards = "Yards",
     ypr = "Yards Per Target"
