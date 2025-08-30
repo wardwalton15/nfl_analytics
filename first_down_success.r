@@ -13,6 +13,19 @@ colors <- nflfastR::teams_colors_logos
 
 pbp_2024 <- pbp_2024 %>%
   left_join(colors, by = c("posteam" = "team_abbr"))
+# pass rate by down
+pbp_2024 %>%
+  filter((rush == 1 | pass == 1 & !is.na(down))) %>%
+  group_by(down) %>%
+  summarise(
+    plays = n(),
+    pass_plays = sum(pass == 1, na.rm = TRUE),
+    epa = mean(epa, na.rm = TRUE),
+    pass_pct = round(100 * mean(pass == 1, na.rm = TRUE), 1),
+    .groups = "drop" 
+  ) 
+
+
 
 #pass_pct by win probability 
 pbp_2024 %>%
@@ -37,14 +50,22 @@ pbp_2024 %>%
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-  #% of pass plays with completion - 54.2%
+#distribution of yards gained- pass vs run(violin plot)
 pbp_2024 %>%
-  filter(pass == 1) %>%
-  summarise(
-    attempts = n(),
-    completions = sum(complete_pass == 1, na.rm = TRUE),
-    comp_pct = round(100 * mean(complete_pass == 1, na.rm = TRUE), 1)
-  )
+  filter((rush == 1 | pass == 1)) %>%
+  mutate(play_type = factor(pass, labels = c("Run", "Pass"))) %>%
+  ggplot(aes(x = play_type, y = yards_gained, fill = play_type)) +
+  geom_violin(trim = FALSE) +
+  geom_boxplot(width = 0.1, position = position_dodge(0.9), outlier.shape = NA) +
+  coord_cartesian(ylim = c(-10, 30)) +
+  labs(
+    title = "Distribution of Yards Gained in 2024",
+    caption = "Data: @nflfastR | Plot: Ward Walton",
+    x = "Play Type",
+    y = "Yards Gained"
+  ) +
+  theme(legend.position = "none")
+
 
   #pct of time you gain 5+ yards by pass vs run
 pbp_2024 %>%
@@ -69,21 +90,15 @@ pbp_2024 %>%
     pct_5_plus = "Pct Gaining 5+"
   )
 
-#distribution of yards gained- pass vs run(violin plot)
+
+  #% of pass plays with completion - 54.2%
 pbp_2024 %>%
-  filter((rush == 1 | pass == 1)) %>%
-  mutate(play_type = factor(pass, labels = c("Run", "Pass"))) %>%
-  ggplot(aes(x = play_type, y = yards_gained, fill = play_type)) +
-  geom_violin(trim = FALSE) +
-  geom_boxplot(width = 0.1, position = position_dodge(0.9), outlier.shape = NA) +
-  coord_cartesian(ylim = c(-10, 30)) +
-  labs(
-    title = "Distribution of Yards Gained in 2024",
-    caption = "Data: @nflfastR | Plot: Ward Walton",
-    x = "Play Type",
-    y = "Yards Gained"
-  ) +
-  theme(legend.position = "none")
+  filter(pass == 1) %>%
+  summarise(
+    attempts = n(),
+    completions = sum(complete_pass == 1, na.rm = TRUE),
+    comp_pct = round(100 * mean(complete_pass == 1, na.rm = TRUE), 1)
+  )
 
 
 
@@ -172,3 +187,31 @@ pbp_2024 %>%
     first_down_pct = "First Down %",
   ) %>%
   gt_nfl_logos(columns = "posteam")
+
+#which qbs get sacked on the highest pct of dropbacks (min 50 dropbacks)
+pbp_2024 %>%
+  filter(pass == 1 & !is.na(passer_player_name)) %>%
+  group_by(passer_player_name, posteam) %>%
+  summarise(
+    dropbacks = n(),
+    sacks = sum(sack == 1, na.rm = TRUE),
+    sack_pct = round(100 * mean(sack == 1, na.rm = TRUE), 1),
+    .groups = "drop"
+  ) %>%
+  filter(dropbacks >= 100) %>%
+  arrange(desc(sack_pct)) %>%
+  slice_head(n = 10) %>%
+  gt() %>%
+  tab_header(
+    title = "QBs with Highest Sack Percentage in 2024",
+    subtitle = "Min 100 Dropbacks"
+  ) %>%
+  cols_label(
+    passer_player_name = "Player",
+    posteam = "Team",
+    dropbacks = "Dropbacks",
+    sacks = "Sacks",
+    sack_pct = "Sack Percentage"
+  ) %>%
+  gt_nfl_logos(columns = "posteam")
+
