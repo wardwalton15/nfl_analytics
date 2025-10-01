@@ -79,16 +79,17 @@ epa <- pbp %>%
 
 view(epa)
 pbp2025 <- load_pbp(2025)
-# team 2nd and 10 pass rate
-early <- pbp2024 %>% 
+# early down pass rate
+early <- pbp2025 %>% 
     filter(!is.na(posteam) & (pass + rush) == 1 & down <= 2) %>%
     group_by(posteam) %>%
     summarise(pass = sum(pass, na.rm = TRUE),
               plays = n(),
               rate = pass/plays) 
+view(early)
 
 #4th down go for it rate by team
-fourth <- pbp2024 %>%
+fourth <- pbp2025 %>%
     filter(!is.na(posteam) & down == 4 & ydstogo <= 7) %>%
     group_by(posteam) %>%
     summarise(plays = n(),
@@ -98,7 +99,7 @@ view(fourth)
 
 #plot early down pass rate vs 4th down go rate
 
-final <- sec %>%
+final <- early %>%
     left_join(fourth, by = "posteam") %>%
     left_join(colors, by = c("posteam" = "team_abbr"))
 
@@ -115,25 +116,26 @@ final %>%
 
 #which qbs throw past the sticks the most?
 pbp %>%
- filter(!is.na(passer_player_id) & pass == 1 & !is.na(ydstogo)) %>% 
- group_by(passer_player_id) %>%
- summarise(team = max(posteam),
- name = max(passer_player_name),
+ filter(!is.na(posteam) & qb_dropback == 1 & !is.na(ydstogo)) %>% 
+ group_by(posteam) %>%
+ summarise(
+epa = mean(epa),
  plays = n(),
               passes_past_stick = sum(air_yards >= ydstogo, na.rm = TRUE),
               pct = passes_past_stick / plays) %>%
-    filter(plays >= 100) %>%
     ungroup() %>%
-    arrange(desc(pct)) %>%
-    left_join(colors, by = c("team" = "team_abbr")) %>%
-    slice_head(n = 10) %>%
-    ggplot(aes(x = reorder(name, pct), y = pct)) +
-    geom_bar(aes(fill = team_color), stat = "identity") +
-    scale_fill_identity() +
-    coord_flip() +
+    ggplot(aes(x = epa, y = pct)) +
+    geom_nfl_logos(aes(team_abbr = posteam), width = .08) +
     labs(
-        title = "Top 10 QBs Who Throw Past the Sticks the Most",
-        subtitle = "Minimum 100 pass attempts")
+        title = "QB Aggressiveness vs Pass EPA/Play",
+        subtitle = "Which Teams throw past the sticks & is it effective for them?",
+        x = "Pass EPA/Play",
+        y = "% of time ball is thrown past sticks") +
+    theme(
+        plot.title = element_text(hjust = 0.5, size = 30, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 25),
+        plot.caption = element_text(hjust = 0.5, size = 15)
+    )
 
 #distribution of epa on passing vs rushing plays (box plot)
 pbp %>%
@@ -189,3 +191,5 @@ run_pass_epa %>%
         plot.subtitle = element_text(hjust = 0.5, size = 25),
         plot.caption = element_text(hjust = 0.5, size = 15)
     )
+
+#
