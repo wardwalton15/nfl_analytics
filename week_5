@@ -1,0 +1,47 @@
+library(nflreadr)
+library(nflfastR)
+library(tidyverse)
+library(nflplotR)
+nflreadr::.clear_cache()
+pbp <- load_pbp(2025)
+pbp <- pbp %>% filter(between(wp, 0.2,0.8))
+#week 5 success rate (% of plays with positive EPA)
+
+off<-pbp %>%
+  filter(!is.na(epa),
+         play_type %in% c("pass", "run")) %>%
+  mutate(success = ifelse(epa > 0, 1, 0)) %>%
+  group_by(posteam) %>%
+  summarise(success_rate = mean(success),
+            plays = n()) 
+  
+def<-pbp %>%
+  filter(!is.na(epa),
+         play_type %in% c("pass", "run")) %>%
+  mutate(success = ifelse(epa < 0, 1, 0)) %>%
+  group_by(defteam) %>%
+  summarise(success_rate = mean(success),
+            plays = n())  
+  
+success <- off %>%
+  inner_join(def, by = c("posteam" = "defteam"), suffix = c("_off", "_def")) %>%
+  mutate(success_rate = (success_rate_off + success_rate_def) / 2,
+         plays = (plays_off + plays_def) / 2)
+
+  success %>%
+  ggplot(aes(x = reorder(posteam, success_rate), y = success_rate)) +
+  geom_bar(stat = "identity", fill = "cornflowerblue") +
+  geom_nfl_logos(aes(team_abbr = posteam), y = 0.395, width = 0.04) +
+  coord_cartesian(ylim = c(.4, .6)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(title = "NFL Net Success Rate by Team",
+       subtitle = "Percent of plays with positive outcome - non garbage time (20% < Win Probability < 80%)",
+       x = "Team",
+       y = "Success Rate",
+       caption = "Data: nflfastR | Plot: Ward Walton") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(face = "bold", hjust = .5, size = 25),
+        plot.subtitle = element_text(hjust = .5, size = 15),
+        plot.caption = element_text(hjust = .5, size = 15), 
+        axis.text.y = element_text(size = 15))

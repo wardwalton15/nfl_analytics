@@ -1,0 +1,6 @@
+library(nflreadr)
+library(nflfastR)
+library(tidyverse)
+library(nflplotR)
+nflreadr::.clear_cache()
+pbp <- load_pbp(2025)
