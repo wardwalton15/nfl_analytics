@@ -1,0 +1,359 @@
+"game_id","posteam","fixed_drive","first_downs","result","result_count","punt_attempts","three_and_out"
+"2026_01_ARI_LAC","ARI",1,5,"Touchdown",1,0,FALSE
+"2026_01_ARI_LAC","ARI",3,2,"Missed field goal",1,0,FALSE
+"2026_01_ARI_LAC","ARI",5,3,"Field goal",1,0,FALSE
+"2026_01_ARI_LAC","ARI",7,4,"Field goal",1,0,FALSE
+"2026_01_ARI_LAC","ARI",9,4,"Field goal",1,0,FALSE
+"2026_01_ARI_LAC","ARI",11,2,"Punt",1,1,FALSE
+"2026_01_ARI_LAC","ARI",13,0,"Punt",1,1,TRUE
+"2026_01_ARI_LAC","ARI",15,1,"Touchdown",1,0,FALSE
+"2026_01_ARI_LAC","ARI",17,2,"Punt",1,1,FALSE
+"2026_01_ARI_LAC","ARI",19,0,"Field goal",1,0,FALSE
+"2026_01_ARI_LAC","ARI",21,0,"End of half",1,0,FALSE
+"2026_01_ARI_LAC","LAC",2,4,"Touchdown",1,0,FALSE
+"2026_01_ARI_LAC","LAC",4,2,"Turnover",1,0,FALSE
+"2026_01_ARI_LAC","LAC",6,4,"Turnover on downs",1,0,FALSE
+"2026_01_ARI_LAC","LAC",8,1,"Punt",1,1,FALSE
+"2026_01_ARI_LAC","LAC",10,2,"Touchdown",1,0,FALSE
+"2026_01_ARI_LAC","LAC",12,1,"Punt",1,1,FALSE
+"2026_01_ARI_LAC","LAC",14,0,"Punt",1,1,TRUE
+"2026_01_ARI_LAC","LAC",16,2,"Turnover",1,0,FALSE
+"2026_01_ARI_LAC","LAC",18,1,"Turnover on downs",1,0,FALSE
+"2026_01_ARI_LAC","LAC",20,0,"Turnover on downs",1,0,FALSE
+"2026_01_ATL_PIT","ATL",2,0,"Punt",1,1,TRUE
+"2026_01_ATL_PIT","ATL",4,2,"Punt",1,1,FALSE
+"2026_01_ATL_PIT","ATL",6,1,"Touchdown",1,0,FALSE
+"2026_01_ATL_PIT","ATL",8,0,"Turnover",1,0,FALSE
+"2026_01_ATL_PIT","ATL",10,1,"Punt",1,1,FALSE
+"2026_01_ATL_PIT","ATL",12,1,"Missed field goal",1,0,FALSE
+"2026_01_ATL_PIT","ATL",14,0,"Punt",1,1,TRUE
+"2026_01_ATL_PIT","ATL",16,2,"Missed field goal",1,0,FALSE
+"2026_01_ATL_PIT","ATL",18,2,"Punt",1,1,FALSE
+"2026_01_ATL_PIT","ATL",20,1,"Field goal",1,0,FALSE
+"2026_01_ATL_PIT","ATL",22,1,"Opp touchdown",1,0,FALSE
+"2026_01_ATL_PIT","ATL",23,2,"Field goal",1,0,FALSE
+"2026_01_ATL_PIT","ATL",25,1,"Punt",1,1,FALSE
+"2026_01_ATL_PIT","PIT",1,0,"Punt",1,1,TRUE
+"2026_01_ATL_PIT","PIT",3,2,"Field goal",1,0,FALSE
+"2026_01_ATL_PIT","PIT",5,1,"Turnover",1,0,FALSE
+"2026_01_ATL_PIT","PIT",7,3,"Field goal",1,0,FALSE
+"2026_01_ATL_PIT","PIT",9,2,"Touchdown",1,0,FALSE
+"2026_01_ATL_PIT","PIT",11,0,"Punt",1,1,TRUE
+"2026_01_ATL_PIT","PIT",13,1,"Turnover on downs",1,0,FALSE
+"2026_01_ATL_PIT","PIT",15,1,"End of half",1,0,FALSE
+"2026_01_ATL_PIT","PIT",17,0,"Punt",1,1,TRUE
+"2026_01_ATL_PIT","PIT",19,1,"Turnover on downs",1,0,FALSE
+"2026_01_ATL_PIT","PIT",21,0,"Punt",1,1,TRUE
+"2026_01_ATL_PIT","PIT",22,0,"Opp touchdown",1,0,FALSE
+"2026_01_ATL_PIT","PIT",24,1,"Missed field goal",1,0,FALSE
+"2026_01_ATL_PIT","PIT",26,3,"End of half",1,0,FALSE
+"2026_01_BAL_IND","BAL",2,2,"Touchdown",1,0,FALSE
+"2026_01_BAL_IND","BAL",4,3,"Touchdown",1,0,FALSE
+"2026_01_BAL_IND","BAL",6,3,"Turnover on downs",1,0,FALSE
+"2026_01_BAL_IND","BAL",8,2,"Touchdown",1,0,FALSE
+"2026_01_BAL_IND","BAL",10,2,"Touchdown",1,0,FALSE
+"2026_01_BAL_IND","BAL",12,0,"Turnover",1,0,FALSE
+"2026_01_BAL_IND","BAL",14,0,"Punt",1,1,TRUE
+"2026_01_BAL_IND","BAL",16,2,"Field goal",1,0,FALSE
+"2026_01_BAL_IND","BAL",17,0,"Punt",1,1,TRUE
+"2026_01_BAL_IND","BAL",19,2,"Punt",1,1,FALSE
+"2026_01_BAL_IND","BAL",21,3,"Touchdown",1,0,FALSE
+"2026_01_BAL_IND","BAL",23,3,"Field goal",1,0,FALSE
+"2026_01_BAL_IND","BAL",25,1,"End of half",1,0,FALSE
+"2026_01_BAL_IND","IND",1,4,"Touchdown",1,0,FALSE
+"2026_01_BAL_IND","IND",3,0,"Turnover",1,0,FALSE
+"2026_01_BAL_IND","IND",5,0,"Punt",1,1,TRUE
+"2026_01_BAL_IND","IND",7,1,"Punt",1,1,FALSE
+"2026_01_BAL_IND","IND",9,0,"Turnover",1,0,FALSE
+"2026_01_BAL_IND","IND",11,0,"Punt",1,1,TRUE
+"2026_01_BAL_IND","IND",13,2,"Touchdown",1,0,FALSE
+"2026_01_BAL_IND","IND",15,0,"Punt",1,1,TRUE
+"2026_01_BAL_IND","IND",18,3,"Field goal",1,0,FALSE
+"2026_01_BAL_IND","IND",20,2,"Punt",1,1,FALSE
+"2026_01_BAL_IND","IND",22,5,"Touchdown",1,0,FALSE
+"2026_01_BAL_IND","IND",24,0,"Turnover on downs",1,0,FALSE
+"2026_01_BUF_HOU","BUF",1,2,"Turnover on downs",1,0,FALSE
+"2026_01_BUF_HOU","BUF",3,0,"Field goal",1,0,FALSE
+"2026_01_BUF_HOU","BUF",5,4,"Touchdown",1,0,FALSE
+"2026_01_BUF_HOU","BUF",7,3,"Touchdown",1,0,FALSE
+"2026_01_BUF_HOU","BUF",9,3,"Touchdown",1,0,FALSE
+"2026_01_BUF_HOU","BUF",11,0,"End of half",1,0,FALSE
+"2026_01_BUF_HOU","BUF",13,1,"Punt",1,1,FALSE
+"2026_01_BUF_HOU","BUF",15,2,"Field goal",1,0,FALSE
+"2026_01_BUF_HOU","BUF",17,1,"Field goal",1,0,FALSE
+"2026_01_BUF_HOU","BUF",19,0,"Punt",1,1,TRUE
+"2026_01_BUF_HOU","BUF",21,4,"Touchdown",1,0,FALSE
+"2026_01_BUF_HOU","BUF",23,0,"End of half",1,0,FALSE
+"2026_01_BUF_HOU","HOU",2,0,"Turnover",1,0,FALSE
+"2026_01_BUF_HOU","HOU",4,5,"Touchdown",1,0,FALSE
+"2026_01_BUF_HOU","HOU",6,7,"Touchdown",1,0,FALSE
+"2026_01_BUF_HOU","HOU",8,1,"Punt",1,1,FALSE
+"2026_01_BUF_HOU","HOU",10,3,"Touchdown",1,0,FALSE
+"2026_01_BUF_HOU","HOU",12,0,"Punt",1,1,TRUE
+"2026_01_BUF_HOU","HOU",14,0,"Punt",1,1,TRUE
+"2026_01_BUF_HOU","HOU",16,5,"Touchdown",1,0,FALSE
+"2026_01_BUF_HOU","HOU",18,1,"Field goal",1,0,FALSE
+"2026_01_BUF_HOU","HOU",20,0,"Punt",1,1,TRUE
+"2026_01_BUF_HOU","HOU",22,3,"Turnover",1,0,FALSE
+"2026_01_CHI_CAR","CAR",2,3,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CAR",4,0,"Punt",1,1,TRUE
+"2026_01_CHI_CAR","CAR",6,0,"Punt",1,1,TRUE
+"2026_01_CHI_CAR","CAR",8,2,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CAR",10,3,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CAR",13,1,"Field goal",1,0,FALSE
+"2026_01_CHI_CAR","CAR",15,1,"Turnover",1,0,FALSE
+"2026_01_CHI_CAR","CAR",17,0,"Punt",1,1,TRUE
+"2026_01_CHI_CAR","CAR",19,4,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CAR",21,1,"Turnover on downs",1,0,FALSE
+"2026_01_CHI_CAR","CAR",23,1,"Turnover",1,0,FALSE
+"2026_01_CHI_CAR","CAR",25,5,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CAR",27,2,"End of half",1,0,FALSE
+"2026_01_CHI_CAR","CHI",1,0,"Turnover",1,0,FALSE
+"2026_01_CHI_CAR","CHI",3,4,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CHI",5,3,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CHI",7,2,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CHI",9,0,"Turnover on downs",1,0,FALSE
+"2026_01_CHI_CAR","CHI",11,0,"Punt",1,1,TRUE
+"2026_01_CHI_CAR","CHI",12,0,"Field goal",1,0,FALSE
+"2026_01_CHI_CAR","CHI",14,3,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CHI",16,0,"End of half",1,0,FALSE
+"2026_01_CHI_CAR","CHI",18,0,"Punt",1,1,TRUE
+"2026_01_CHI_CAR","CHI",20,7,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CHI",22,1,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CHI",24,4,"Touchdown",1,0,FALSE
+"2026_01_CHI_CAR","CHI",26,2,"Touchdown",1,0,FALSE
+"2026_01_CLE_JAX","CLE",1,2,"Turnover",1,0,FALSE
+"2026_01_CLE_JAX","CLE",3,0,"Punt",1,1,TRUE
+"2026_01_CLE_JAX","CLE",5,0,"Punt",1,1,TRUE
+"2026_01_CLE_JAX","CLE",7,0,"Turnover",1,0,FALSE
+"2026_01_CLE_JAX","CLE",9,1,"Punt",1,1,FALSE
+"2026_01_CLE_JAX","CLE",11,2,"End of half",1,0,FALSE
+"2026_01_CLE_JAX","CLE",13,1,"Field goal",1,0,FALSE
+"2026_01_CLE_JAX","CLE",15,4,"Turnover on downs",1,0,FALSE
+"2026_01_CLE_JAX","CLE",17,4,"Touchdown",1,0,FALSE
+"2026_01_CLE_JAX","JAX",2,3,"Touchdown",1,0,FALSE
+"2026_01_CLE_JAX","JAX",4,6,"Touchdown",1,0,FALSE
+"2026_01_CLE_JAX","JAX",6,3,"Field goal",1,0,FALSE
+"2026_01_CLE_JAX","JAX",8,3,"Touchdown",1,0,FALSE
+"2026_01_CLE_JAX","JAX",10,1,"Punt",1,1,FALSE
+"2026_01_CLE_JAX","JAX",12,3,"Touchdown",1,0,FALSE
+"2026_01_CLE_JAX","JAX",14,3,"Field goal",1,0,FALSE
+"2026_01_CLE_JAX","JAX",16,1,"Punt",1,1,FALSE
+"2026_01_CLE_JAX","JAX",18,0,"End of half",1,0,FALSE
+"2026_01_DAL_NYG","DAL",1,0,"Punt",1,1,TRUE
+"2026_01_DAL_NYG","DAL",3,2,"Punt",1,1,FALSE
+"2026_01_DAL_NYG","DAL",5,5,"Touchdown",1,0,FALSE
+"2026_01_DAL_NYG","DAL",7,1,"Turnover",1,0,FALSE
+"2026_01_DAL_NYG","DAL",9,1,"End of half",1,0,FALSE
+"2026_01_DAL_NYG","DAL",11,7,"Touchdown",1,0,FALSE
+"2026_01_DAL_NYG","DAL",13,4,"Touchdown",1,0,FALSE
+"2026_01_DAL_NYG","NYG",2,5,"Touchdown",1,0,FALSE
+"2026_01_DAL_NYG","NYG",4,2,"Punt",1,1,FALSE
+"2026_01_DAL_NYG","NYG",6,3,"Turnover",1,0,FALSE
+"2026_01_DAL_NYG","NYG",8,3,"Touchdown",1,0,FALSE
+"2026_01_DAL_NYG","NYG",10,6,"Touchdown",1,0,FALSE
+"2026_01_DAL_NYG","NYG",12,5,"Touchdown",1,0,FALSE
+"2026_01_DAL_NYG","NYG",14,4,"End of half",1,0,FALSE
+"2026_01_DEN_KC","DEN",1,0,"Turnover",1,0,FALSE
+"2026_01_DEN_KC","DEN",3,5,"Touchdown",1,0,FALSE
+"2026_01_DEN_KC","DEN",5,1,"Punt",1,1,FALSE
+"2026_01_DEN_KC","DEN",7,0,"Punt",1,1,TRUE
+"2026_01_DEN_KC","DEN",9,0,"Punt",1,1,TRUE
+"2026_01_DEN_KC","DEN",11,0,"Punt",1,1,TRUE
+"2026_01_DEN_KC","DEN",14,1,"Punt",1,1,FALSE
+"2026_01_DEN_KC","DEN",16,0,"Field goal",1,0,FALSE
+"2026_01_DEN_KC","DEN",18,1,"Turnover",1,0,FALSE
+"2026_01_DEN_KC","DEN",20,0,"Punt",1,1,TRUE
+"2026_01_DEN_KC","DEN",22,1,"Turnover on downs",1,0,FALSE
+"2026_01_DEN_KC","DEN",24,0,"End of half",1,0,FALSE
+"2026_01_DEN_KC","KC",2,4,"Touchdown",1,0,FALSE
+"2026_01_DEN_KC","KC",4,0,"Punt",1,1,TRUE
+"2026_01_DEN_KC","KC",6,1,"Punt",1,1,FALSE
+"2026_01_DEN_KC","KC",8,1,"Punt",1,1,FALSE
+"2026_01_DEN_KC","KC",10,5,"Touchdown",1,0,FALSE
+"2026_01_DEN_KC","KC",12,0,"End of half",1,0,FALSE
+"2026_01_DEN_KC","KC",13,1,"Touchdown",1,0,FALSE
+"2026_01_DEN_KC","KC",15,0,"Turnover",1,0,FALSE
+"2026_01_DEN_KC","KC",17,1,"Field goal",1,0,FALSE
+"2026_01_DEN_KC","KC",19,2,"Touchdown",1,0,FALSE
+"2026_01_DEN_KC","KC",21,2,"Punt",1,1,FALSE
+"2026_01_DEN_KC","KC",23,1,"Turnover on downs",1,0,FALSE
+"2026_01_GB_MIN","GB",2,1,"Field goal",1,0,FALSE
+"2026_01_GB_MIN","GB",4,1,"Touchdown",1,0,FALSE
+"2026_01_GB_MIN","GB",6,1,"Field goal",1,0,FALSE
+"2026_01_GB_MIN","GB",8,1,"Punt",1,1,FALSE
+"2026_01_GB_MIN","GB",10,0,"Punt",1,1,TRUE
+"2026_01_GB_MIN","GB",12,4,"Touchdown",1,0,FALSE
+"2026_01_GB_MIN","GB",14,2,"Punt",1,1,FALSE
+"2026_01_GB_MIN","GB",16,4,"Field goal",1,0,FALSE
+"2026_01_GB_MIN","GB",18,2,"Turnover on downs",1,0,FALSE
+"2026_01_GB_MIN","GB",20,0,"Turnover",1,0,FALSE
+"2026_01_GB_MIN","GB",22,0,"Turnover",1,0,FALSE
+"2026_01_GB_MIN","GB",24,3,"Turnover on downs",1,0,FALSE
+"2026_01_GB_MIN","MIN",1,0,"Turnover",1,0,FALSE
+"2026_01_GB_MIN","MIN",3,1,"Punt",1,1,FALSE
+"2026_01_GB_MIN","MIN",5,3,"Field goal",1,0,FALSE
+"2026_01_GB_MIN","MIN",7,1,"Punt",1,1,FALSE
+"2026_01_GB_MIN","MIN",9,0,"Punt",1,1,TRUE
+"2026_01_GB_MIN","MIN",11,3,"Touchdown",1,0,FALSE
+"2026_01_GB_MIN","MIN",13,0,"End of half",1,0,FALSE
+"2026_01_GB_MIN","MIN",15,0,"Punt",1,1,TRUE
+"2026_01_GB_MIN","MIN",17,2,"Touchdown",1,0,FALSE
+"2026_01_GB_MIN","MIN",19,6,"Touchdown",1,0,FALSE
+"2026_01_GB_MIN","MIN",21,1,"Touchdown",1,0,FALSE
+"2026_01_GB_MIN","MIN",23,1,"Touchdown",1,0,FALSE
+"2026_01_GB_MIN","MIN",25,0,"End of half",1,0,FALSE
+"2026_01_MIA_LV","LV",2,7,"Touchdown",1,0,FALSE
+"2026_01_MIA_LV","LV",4,2,"Field goal",1,0,FALSE
+"2026_01_MIA_LV","LV",6,3,"Touchdown",1,0,FALSE
+"2026_01_MIA_LV","LV",8,0,"Turnover",1,0,FALSE
+"2026_01_MIA_LV","LV",10,3,"Touchdown",1,0,FALSE
+"2026_01_MIA_LV","LV",12,4,"Field goal",1,0,FALSE
+"2026_01_MIA_LV","LV",14,0,"Punt",1,1,TRUE
+"2026_01_MIA_LV","LV",16,1,"Turnover",1,0,FALSE
+"2026_01_MIA_LV","LV",18,1,"Punt",1,1,FALSE
+"2026_01_MIA_LV","LV",20,0,"Punt",1,1,TRUE
+"2026_01_MIA_LV","LV",22,0,"End of half",1,0,FALSE
+"2026_01_MIA_LV","MIA",1,2,"Punt",1,1,FALSE
+"2026_01_MIA_LV","MIA",3,0,"Punt",1,1,TRUE
+"2026_01_MIA_LV","MIA",5,3,"Field goal",1,0,FALSE
+"2026_01_MIA_LV","MIA",7,2,"Field goal",1,0,FALSE
+"2026_01_MIA_LV","MIA",9,3,"Touchdown",1,0,FALSE
+"2026_01_MIA_LV","MIA",11,0,"Turnover",1,0,FALSE
+"2026_01_MIA_LV","MIA",13,0,"Missed field goal",1,0,FALSE
+"2026_01_MIA_LV","MIA",15,0,"Punt",1,1,TRUE
+"2026_01_MIA_LV","MIA",17,0,"Punt",1,1,TRUE
+"2026_01_MIA_LV","MIA",19,2,"Turnover on downs",1,0,FALSE
+"2026_01_MIA_LV","MIA",21,1,"Turnover",1,0,FALSE
+"2026_01_NE_SEA","NE",2,2,"Punt",1,1,FALSE
+"2026_01_NE_SEA","NE",4,1,"Punt",1,1,FALSE
+"2026_01_NE_SEA","NE",6,5,"Touchdown",1,0,FALSE
+"2026_01_NE_SEA","NE",8,2,"Punt",1,1,FALSE
+"2026_01_NE_SEA","NE",10,2,"Field goal",1,0,FALSE
+"2026_01_NE_SEA","NE",12,0,"Punt",1,1,TRUE
+"2026_01_NE_SEA","NE",14,2,"Turnover",1,0,FALSE
+"2026_01_NE_SEA","NE",16,1,"Turnover",1,0,FALSE
+"2026_01_NE_SEA","NE",18,4,"Turnover",1,0,FALSE
+"2026_01_NE_SEA","SEA",1,2,"Punt",1,1,FALSE
+"2026_01_NE_SEA","SEA",3,1,"Punt",1,1,FALSE
+"2026_01_NE_SEA","SEA",5,1,"Punt",1,1,FALSE
+"2026_01_NE_SEA","SEA",7,1,"Punt",1,1,FALSE
+"2026_01_NE_SEA","SEA",9,1,"End of half",1,0,FALSE
+"2026_01_NE_SEA","SEA",11,1,"Punt",1,1,FALSE
+"2026_01_NE_SEA","SEA",13,1,"Field goal",1,0,FALSE
+"2026_01_NE_SEA","SEA",15,2,"Touchdown",1,0,FALSE
+"2026_01_NE_SEA","SEA",17,3,"Field goal",1,0,FALSE
+"2026_01_NE_SEA","SEA",19,0,"End of half",1,0,FALSE
+"2026_01_NO_DET","DET",1,0,"Punt",1,1,TRUE
+"2026_01_NO_DET","DET",3,7,"Touchdown",1,0,FALSE
+"2026_01_NO_DET","DET",5,2,"Punt",1,1,FALSE
+"2026_01_NO_DET","DET",7,2,"Punt",1,1,FALSE
+"2026_01_NO_DET","DET",9,0,"Turnover",1,0,FALSE
+"2026_01_NO_DET","DET",11,0,"Punt",1,1,TRUE
+"2026_01_NO_DET","DET",13,1,"End of half",1,0,FALSE
+"2026_01_NO_DET","DET",15,4,"Touchdown",1,0,FALSE
+"2026_01_NO_DET","DET",17,1,"Touchdown",1,0,FALSE
+"2026_01_NO_DET","DET",19,0,"Punt",1,1,TRUE
+"2026_01_NO_DET","DET",21,1,"Punt",1,1,FALSE
+"2026_01_NO_DET","DET",23,3,"Field goal",1,0,FALSE
+"2026_01_NO_DET","DET",25,0,"Punt",1,1,TRUE
+"2026_01_NO_DET","DET",27,5,"Touchdown",1,0,FALSE
+"2026_01_NO_DET","DET",29,0,"End of half",1,0,FALSE
+"2026_01_NO_DET","NO",2,1,"Punt",1,1,FALSE
+"2026_01_NO_DET","NO",4,0,"Punt",1,1,TRUE
+"2026_01_NO_DET","NO",6,1,"Punt",1,1,FALSE
+"2026_01_NO_DET","NO",8,1,"Punt",1,1,FALSE
+"2026_01_NO_DET","NO",10,1,"Turnover",1,0,FALSE
+"2026_01_NO_DET","NO",12,3,"Punt",1,1,FALSE
+"2026_01_NO_DET","NO",14,0,"Turnover",1,0,FALSE
+"2026_01_NO_DET","NO",16,0,"Turnover",1,0,FALSE
+"2026_01_NO_DET","NO",18,4,"Touchdown",1,0,FALSE
+"2026_01_NO_DET","NO",20,4,"Touchdown",1,0,FALSE
+"2026_01_NO_DET","NO",22,3,"Field goal",1,0,FALSE
+"2026_01_NO_DET","NO",24,4,"Touchdown",1,0,FALSE
+"2026_01_NO_DET","NO",26,2,"Missed field goal",1,0,FALSE
+"2026_01_NO_DET","NO",28,5,"Touchdown",1,0,FALSE
+"2026_01_NYJ_TEN","NYJ",1,4,"Touchdown",1,0,FALSE
+"2026_01_NYJ_TEN","NYJ",3,0,"Punt",1,1,TRUE
+"2026_01_NYJ_TEN","NYJ",5,5,"Field goal",1,0,FALSE
+"2026_01_NYJ_TEN","NYJ",6,0,"Missed field goal",1,0,FALSE
+"2026_01_NYJ_TEN","NYJ",8,2,"End of half",1,0,FALSE
+"2026_01_NYJ_TEN","NYJ",10,3,"Touchdown",1,0,FALSE
+"2026_01_NYJ_TEN","NYJ",12,3,"Field goal",1,0,FALSE
+"2026_01_NYJ_TEN","NYJ",14,0,"Punt",1,1,TRUE
+"2026_01_NYJ_TEN","NYJ",16,0,"Punt",1,1,TRUE
+"2026_01_NYJ_TEN","NYJ",18,1,"Field goal",1,0,FALSE
+"2026_01_NYJ_TEN","NYJ",20,1,"End of half",1,0,FALSE
+"2026_01_NYJ_TEN","TEN",2,3,"Field goal",1,0,FALSE
+"2026_01_NYJ_TEN","TEN",4,0,"Punt",1,1,TRUE
+"2026_01_NYJ_TEN","TEN",6,0,"Missed field goal",1,0,FALSE
+"2026_01_NYJ_TEN","TEN",7,0,"Punt",1,1,TRUE
+"2026_01_NYJ_TEN","TEN",9,1,"Punt",1,1,FALSE
+"2026_01_NYJ_TEN","TEN",11,0,"Punt",1,1,TRUE
+"2026_01_NYJ_TEN","TEN",13,2,"Punt",1,1,FALSE
+"2026_01_NYJ_TEN","TEN",15,0,"Punt",1,1,TRUE
+"2026_01_NYJ_TEN","TEN",17,1,"Punt",1,1,FALSE
+"2026_01_NYJ_TEN","TEN",19,4,"Touchdown",1,0,FALSE
+"2026_01_SF_LA","LA",1,0,"Punt",1,1,TRUE
+"2026_01_SF_LA","LA",3,1,"Punt",1,1,FALSE
+"2026_01_SF_LA","LA",5,2,"Touchdown",1,0,FALSE
+"2026_01_SF_LA","LA",7,2,"Turnover",1,0,FALSE
+"2026_01_SF_LA","LA",9,1,"Punt",1,1,FALSE
+"2026_01_SF_LA","LA",11,0,"End of half",1,0,FALSE
+"2026_01_SF_LA","LA",13,4,"Turnover on downs",1,0,FALSE
+"2026_01_SF_LA","LA",15,1,"Turnover",1,0,FALSE
+"2026_01_SF_LA","LA",17,1,"Turnover on downs",1,0,FALSE
+"2026_01_SF_LA","LA",19,3,"End of half",1,0,FALSE
+"2026_01_SF_LA","SF",2,4,"Field goal",1,0,FALSE
+"2026_01_SF_LA","SF",4,0,"Punt",1,1,TRUE
+"2026_01_SF_LA","SF",6,2,"Turnover",1,0,FALSE
+"2026_01_SF_LA","SF",8,4,"Touchdown",1,0,FALSE
+"2026_01_SF_LA","SF",10,2,"Punt",1,1,FALSE
+"2026_01_SF_LA","SF",12,4,"Touchdown",1,0,FALSE
+"2026_01_SF_LA","SF",14,6,"Touchdown",1,0,FALSE
+"2026_01_SF_LA","SF",16,0,"Field goal",1,0,FALSE
+"2026_01_SF_LA","SF",18,1,"Missed field goal",1,0,FALSE
+"2026_01_TB_CIN","CIN",2,0,"Punt",1,1,TRUE
+"2026_01_TB_CIN","CIN",3,0,"Opp touchdown",1,0,FALSE
+"2026_01_TB_CIN","CIN",5,3,"Touchdown",1,0,FALSE
+"2026_01_TB_CIN","CIN",7,7,"Touchdown",1,0,FALSE
+"2026_01_TB_CIN","CIN",9,4,"Field goal",1,0,FALSE
+"2026_01_TB_CIN","CIN",11,2,"Field goal",1,0,FALSE
+"2026_01_TB_CIN","CIN",13,0,"Opp touchdown",1,0,FALSE
+"2026_01_TB_CIN","CIN",14,3,"Field goal",1,0,FALSE
+"2026_01_TB_CIN","CIN",16,2,"Field goal",1,0,FALSE
+"2026_01_TB_CIN","CIN",18,4,"End of half",1,0,FALSE
+"2026_01_TB_CIN","TB",1,3,"Field goal",1,0,FALSE
+"2026_01_TB_CIN","TB",3,0,"Opp touchdown",1,0,FALSE
+"2026_01_TB_CIN","TB",4,0,"Turnover",1,0,FALSE
+"2026_01_TB_CIN","TB",6,4,"Turnover",1,0,FALSE
+"2026_01_TB_CIN","TB",8,4,"Touchdown",1,0,FALSE
+"2026_01_TB_CIN","TB",10,0,"End of half",1,0,FALSE
+"2026_01_TB_CIN","TB",12,2,"Field goal",1,0,FALSE
+"2026_01_TB_CIN","TB",13,0,"Opp touchdown",1,0,FALSE
+"2026_01_TB_CIN","TB",15,2,"Turnover",1,0,FALSE
+"2026_01_TB_CIN","TB",17,4,"Touchdown",1,0,FALSE
+"2026_01_WAS_PHI","PHI",2,1,"Punt",1,1,FALSE
+"2026_01_WAS_PHI","PHI",4,0,"Punt",1,1,TRUE
+"2026_01_WAS_PHI","PHI",6,2,"Touchdown",1,0,FALSE
+"2026_01_WAS_PHI","PHI",8,0,"Punt",1,1,TRUE
+"2026_01_WAS_PHI","PHI",10,2,"Touchdown",1,0,FALSE
+"2026_01_WAS_PHI","PHI",12,1,"Punt",1,1,FALSE
+"2026_01_WAS_PHI","PHI",14,0,"Punt",1,1,TRUE
+"2026_01_WAS_PHI","PHI",16,0,"Punt",1,1,TRUE
+"2026_01_WAS_PHI","PHI",18,0,"Punt",1,1,TRUE
+"2026_01_WAS_PHI","PHI",20,1,"Field goal",1,0,FALSE
+"2026_01_WAS_PHI","PHI",22,3,"Touchdown",1,0,FALSE
+"2026_01_WAS_PHI","PHI",24,0,"End of half",1,0,FALSE
+"2026_01_WAS_PHI","WAS",1,2,"Field goal",1,0,FALSE
+"2026_01_WAS_PHI","WAS",3,0,"Punt",1,1,TRUE
+"2026_01_WAS_PHI","WAS",5,0,"Punt",1,1,TRUE
+"2026_01_WAS_PHI","WAS",7,0,"Punt",1,1,TRUE
+"2026_01_WAS_PHI","WAS",9,1,"Punt",1,1,FALSE
+"2026_01_WAS_PHI","WAS",11,6,"Touchdown",1,0,FALSE
+"2026_01_WAS_PHI","WAS",13,0,"End of half",1,0,FALSE
+"2026_01_WAS_PHI","WAS",15,0,"Punt",1,1,TRUE
+"2026_01_WAS_PHI","WAS",17,2,"Missed field goal",1,0,FALSE
+"2026_01_WAS_PHI","WAS",19,0,"Punt",1,1,TRUE
+"2026_01_WAS_PHI","WAS",21,4,"Touchdown",1,0,FALSE
+"2026_01_WAS_PHI","WAS",23,5,"Touchdown",1,0,FALSE
