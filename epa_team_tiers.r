@@ -1,25 +1,31 @@
-# Run: Rscript epa_team_tiers.r [season=2026] [week=1] [optional PBP .rds]
+# Run: Rscript epa_team_tiers.r [season=2026] [week=1 | YYYY-MM-DD] [optional PBP .rds]
+# A date instead of a week aggregates every REG game played before that date.
 # Packages: nflreadr, dplyr, ggplot2, ggpath, ragg (and ggpath dependencies).
 # The /tmp library is optional; it supports this project's existing local setup.
 .libPaths(c('/private/tmp/nfl-chart-r-library', .libPaths()))
 suppressPackageStartupMessages({library(dplyr); library(ggplot2); library(grid)})
 args <- commandArgs(trailingOnly = TRUE)
 season_id <- if (length(args) >= 1) as.integer(args[1]) else 2026L
-week_id <- if (length(args) >= 2) as.integer(args[2]) else 1L
-stopifnot(!is.na(season_id), !is.na(week_id), week_id >= 1, week_id <= 18)
-out_dir <- sprintf('outputs/epa_team_tiers_%s_week_%s', season_id, week_id)
+week_arg <- if (length(args) >= 2) args[2] else '1'
+before_date <- if (grepl('^\\d{4}-\\d{2}-\\d{2}$', week_arg)) as.Date(week_arg) else NA
+week_id <- if (is.na(before_date)) as.integer(week_arg) else NA_integer_
+stopifnot(!is.na(season_id), !is.na(before_date) || (!is.na(week_id) && week_id %in% 1:18))
+out_dir <- if (is.na(before_date)) sprintf('outputs/epa_team_tiers_%s_week_%s', season_id, week_id) else
+  sprintf('outputs/epa_team_tiers_%s_entering_%s', season_id, before_date)
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 cache <- file.path(out_dir, 'source_pbp.rds')
 source_path <- if (length(args) >= 3) args[3] else if (file.exists(cache)) cache else NULL
 pbp <- if (!is.null(source_path)) readRDS(source_path) else nflreadr::load_pbp(season_id)
 source_time <- attr(pbp, 'nflverse_timestamp')
 week_pbp <- pbp |>
-  filter(season == season_id, season_type == 'REG', week == week_id,
-         !coalesce(play_deleted == 1, FALSE))
+  filter(season == season_id, season_type == 'REG', !coalesce(play_deleted == 1, FALSE),
+         if (is.na(before_date)) week == week_id else as.Date(game_date) < before_date)
+if (!is.na(before_date)) week_id <- max(week_pbp$week)
 plays <- week_pbp |>
   filter(play_type %in% c('run', 'pass'), is.finite(epa),
          !is.na(posteam), !is.na(defteam), coalesce(qb_kneel, 0) == 0,
-         coalesce(qb_spike, 0) == 0, coalesce(two_point_attempt, 0) == 0)
+         coalesce(qb_spike, 0) == 0, coalesce(two_point_attempt, 0) == 0,
+         between(wp, .02, .98))
 if (!nrow(plays)) stop('No eligible plays for requested season/week.')
 stopifnot(!anyDuplicated(plays[c('game_id', 'play_id')]))
 offense <- plays |> group_by(team = posteam) |>
@@ -29,7 +35,7 @@ defense <- plays |> group_by(team = defteam) |>
 teams <- inner_join(offense, defense, by = 'team') |>
   mutate(net_epa = offense_epa - defense_epa_allowed)
 games <- n_distinct(week_pbp$game_id)
-if (week_id == 1L && (games != 16L || nrow(teams) != 32L)) {
+if (is.na(before_date) && week_id == 1L && (games != 16L || nrow(teams) != 32L)) {
   stop('Week 1 coverage is incomplete: ', games, ' games / ', nrow(teams), ' teams.')
 }
 stopifnot(sum(teams$off_plays) == nrow(plays), sum(teams$def_plays) == nrow(plays),
@@ -38,8 +44,9 @@ stopifnot(sum(teams$off_plays) == nrow(plays), sum(teams$def_plays) == nrow(play
               weighted.mean(teams$defense_epa_allowed, teams$def_plays)) < 1e-10)
 saveRDS(week_pbp, cache)
 
-# Explicit editorial tiers of single-week net EPA; these are not predictive rankings.
-cuts <- c(-Inf, -.30, -.10, .10, .30, Inf)
+# Explicit editorial tiers of net EPA; these are not predictive rankings.
+# Multi-week averages regress toward zero, so date mode uses tighter cutoffs.
+cuts <- if (is.na(before_date)) c(-Inf, -.30, -.10, .10, .30, Inf) else c(-Inf, -.20, -.05, .05, .20, Inf)
 tier_names <- c('STRUGGLING', 'SHAKY', 'MIDDLE', 'STRONG', 'ELITE')
 tier_colors <- c('#944D4B', '#8A643D', '#69665E', '#617345', '#2E7058')
 band_colors <- c('#EED8D3', '#F0E3CE', '#E8E5DC', '#E0E7CF', '#CFE3D6')
@@ -67,7 +74,16 @@ for (tm in teams$team) {
 teams$logo <- file.path(logo_dir, paste0(teams$team, '.png'))
 
 # Defensive axis is flipped so up/right always means better.
-lim <- ceiling((max(abs(c(teams$offense_epa, teams$defense_epa_allowed))) + .075) * 10) / 10
+# Single weeks use a symmetric window; date mode crops to the teams (kept square for 45° bands).
+if (is.na(before_date)) {
+  lim <- ceiling((max(abs(c(teams$offense_epa, teams$defense_epa_allowed))) + .075) * 10) / 10
+  xl <- yl <- c(-lim, lim)
+} else {
+  xr <- range(teams$offense_epa); yr <- range(-teams$defense_epa_allowed)
+  lim <- (max(diff(xr), diff(yr)) + .08) / 2
+  xl <- mean(xr) + c(-lim, lim); yl <- mean(yr) + c(-lim, lim)
+}
+break_step <- if (is.na(before_date)) .2 else .1
 clip_band <- function(poly, threshold, above) {
   if (!nrow(poly)) return(poly)
   output <- matrix(numeric(0), ncol = 2)
@@ -81,7 +97,7 @@ clip_band <- function(poly, threshold, above) {
   output
 }
 bands <- bind_rows(lapply(seq_along(tier_names), function(i) {
-  p <- rbind(c(-lim, -lim), c(lim, -lim), c(lim, lim), c(-lim, lim))
+  p <- rbind(c(xl[1], yl[1]), c(xl[2], yl[1]), c(xl[2], yl[2]), c(xl[1], yl[2]))
   if (is.finite(cuts[i])) p <- clip_band(p, cuts[i], TRUE)
   if (is.finite(cuts[i + 1])) p <- clip_band(p, cuts[i + 1], FALSE)
   data.frame(x = p[, 1], y = p[, 2], tier = tier_names[i])
@@ -101,7 +117,8 @@ for (iteration in 1:800) {
       pos[i, ] <- pos[i, ] - push; pos[j, ] <- pos[j, ] + push
     }
   }
-  pos[] <- pmax(-lim + min_distance / 2, pmin(lim - min_distance / 2, pos))
+  pos[, 1] <- pmax(xl[1] + min_distance / 2, pmin(xl[2] - min_distance / 2, pos[, 1]))
+  pos[, 2] <- pmax(yl[1] + min_distance / 2, pmin(yl[2] - min_distance / 2, pos[, 2]))
 }
 teams$logo_x <- pos[, 1]; teams$logo_y <- pos[, 2]
 teams$moved <- sqrt(rowSums((pos - anchor)^2)) > .004
@@ -121,11 +138,11 @@ plot <- ggplot() +
   geom_point(data = filter(teams, moved), aes(offense_epa, -defense_epa_allowed),
              color = '#716E64', size = 1.1) +
   ggpath::geom_from_path(data = teams, aes(logo_x, logo_y, path = logo), width = .070) +
-  scale_x_continuous(breaks = seq(-floor(lim / .2), floor(lim / .2)) * .2,
+  scale_x_continuous(breaks = seq(ceiling(xl[1] / break_step), floor(xl[2] / break_step)) * break_step,
                      labels = scales::label_number(accuracy = .1)) +
-  scale_y_continuous(breaks = seq(-floor(lim / .2), floor(lim / .2)) * .2,
+  scale_y_continuous(breaks = seq(ceiling(yl[1] / break_step), floor(yl[2] / break_step)) * break_step,
                      labels = function(x) sprintf('%.1f', ifelse(abs(x) < 1e-8, 0, -x))) +
-  coord_fixed(xlim = c(-lim, lim), ylim = c(-lim, lim), expand = FALSE) +
+  coord_fixed(xlim = xl, ylim = yl, expand = FALSE) +
   labs(x = 'OFFENSIVE EPA / PLAY  →', y = 'DEFENSIVE EPA / PLAY ALLOWED  →') +
   theme_minimal(base_family = 'Arial', base_size = 12) +
   theme(plot.background = element_rect(fill = bg, color = NA),
@@ -146,9 +163,10 @@ draw_poster <- function(path, scale = 1) {
   }
   grid.roundrect(x = .205, y = .928, width = .29, height = .029,
                  r = unit(.008, 'npc'), gp = gpar(fill = '#2E7058', col = NA))
-  txt(sprintf('%s  /  WEEK %02d', season_id, week_id), .205, .928, 13, bg, 'bold', 'center')
-  txt('NFL TEAM TIERS', .06, .875, 38, face = 'bold')
-  txt('Who actually owned the week?', .063, .833, 18, muted)
+  badge <- if (is.na(before_date)) sprintf('%s  /  WEEK %02d', season_id, week_id) else
+    sprintf('ENTERING %s', toupper(format(before_date, '%b %d')))
+  txt(badge, .205, .928, 13, bg, 'bold', 'center')
+  txt('NFL TEAM TIERS', .06, .855, 38, face = 'bold')
   grid.lines(x = c(.06, .92), y = c(.802, .802), gp = gpar(col = '#C7C0B1', lwd = 1))
   txt('EPA / PLAY', .065, .779, 12, face = 'bold')
   txt('BETTER TEAMS  ↗', .92, .779, 12, '#2E7058', 'bold', 'right')
@@ -159,7 +177,9 @@ draw_poster <- function(path, scale = 1) {
     grid.roundrect(x = x + .079, y = .192, width = .162, height = .027,
                    r = unit(.005, 'npc'), gp = gpar(fill = band_colors[i], col = NA))
     txt(tier_names[i], x + .079, .192, 9.8, tier_colors[i], 'bold', 'center')
-    label <- c('< −0.30', '−0.30 to −0.10', '−0.10 to +0.10', '+0.10 to +0.30', '≥ +0.30')[i]
+    fmt <- function(v) sub('-', '−', sprintf('%+.2f', v))
+    label <- if (i == 1) paste('<', fmt(cuts[2])) else if (i == 5) paste('≥', fmt(cuts[5])) else
+      paste(fmt(cuts[i]), 'to', fmt(cuts[i + 1]))
     txt(label, x + .079, .167, 9, muted, just = 'center')
   }
   txt('SOURCE: NFLVERSE', .065, .108, 11, muted, 'bold')
@@ -169,22 +189,25 @@ draw_poster <- function(path, scale = 1) {
 draw_poster(file.path(out_dir, 'epa_team_tiers_tiktok.png'))
 draw_poster(file.path(out_dir, 'epa_team_tiers_tiktok_2x.png'), 2)
 writeLines(c(
-  sprintf('# %s Week %s EPA/play team tiers', season_id, week_id),
+  if (is.na(before_date)) sprintf('# %s Week %s EPA/play team tiers', season_id, week_id) else
+    sprintf('# %s EPA/play team tiers, REG games before %s (through week %s)', season_id, before_date, week_id),
   sprintf('Coverage: %s games, %s teams, %s eligible plays.', games, nrow(teams), nrow(plays)),
   paste('nflverse source timestamp:', paste(source_time, collapse = ' ')),
   'Source: https://nflreadr.nflverse.com/reference/load_pbp.html',
   'Offense: mean offensive EPA. Defense: mean opponent EPA allowed (lower is better).',
   'Net EPA/play = offense EPA/play minus defense EPA/play allowed.',
   'Tier cutoffs are editorial, fixed in raw EPA units, and lower-bound inclusive:',
-  'Struggling < -0.30; Shaky [-0.30,-0.10); Middle [-0.10,0.10); Strong [0.10,0.30); Elite >= 0.30.',
-  'These describe the selected week only, with no opponent adjustment or predictive claim.',
+  sprintf('Struggling < %.2f; Shaky [%.2f,%.2f); Middle [%.2f,%.2f); Strong [%.2f,%.2f); Elite >= %.2f.',
+          cuts[2], cuts[2], cuts[3], cuts[3], cuts[4], cuts[4], cuts[5], cuts[5]),
+  'These describe the selected games only, with no opponent adjustment or predictive claim.',
   'Eligible plays: finite EPA, run/pass play_type, nonmissing offense/defense; includes sacks/scrambles.',
+  'Only plays with offensive win probability between 2% and 98% (inclusive) are counted.',
   'Exclude deleted plays, kneels, spikes, two-point attempts, no-plays and special teams.',
   'Axes: offense increases right; defense allowed decreases up. Dashed lines indicate zero EPA.',
   'Logos are separated deterministically for readability. Leaders/dots show displaced true locations.',
   'PNG exports: 1080 x 1920 and 2160 x 3840. All tier values also appear in team_summary.csv.',
   'source_pbp.rds stores this week so a default rerun reproduces the chart without downloading.',
-  sprintf('Recreate: Rscript epa_team_tiers.r %s %s', season_id, week_id)
+  sprintf('Recreate: Rscript epa_team_tiers.r %s %s', season_id, week_arg)
 ), file.path(out_dir, 'README.md'))
 print(teams |> select(team, offense_epa, defense_epa_allowed, net_epa, tier), n = 32)
 message('Saved chart and audit files to ', out_dir)
