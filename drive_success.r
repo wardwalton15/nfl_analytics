@@ -3,8 +3,12 @@ library(nflfastR)
 library(tidyverse)
 library(nflplotR)
 nflreadr::.clear_cache()
-pbp <- load_pbp(2025)
+season_id <- 2026
+through_week <- 7
+pbp <- load_pbp(season_id) %>% filter(season_type == "REG", week <= through_week)
 colors <- nflfastR::teams_colors_logos
+out <- sprintf("outputs/drive_outcomes_%s_through_week_%s", season_id, through_week)
+dir.create(out, recursive = TRUE, showWarnings = FALSE)
 
 unique(pbp$fixed_drive_result)
 
@@ -65,18 +69,20 @@ team_order <- drive_summary %>%
 plot_data <- plot_data %>%
   mutate(posteam = factor(posteam, levels = team_order))
 
-# logo positions (top of bars)
+# logo positions (end of TD + FG attempt segment)
 logo_positions <- plot_data %>%
   group_by(posteam) %>%
-  summarise(y = sum(pct)/2, .groups = "drop")
+  summarise(y = sum(pct[result %in% c("Touchdown", "FG Attempt")]), .groups = "drop")
 
-ggplot(plot_data, aes(x = posteam, y = pct, fill = result)) +
+write.csv(drive_summary, file.path(out, "offense.csv"), row.names = FALSE)
+
+offense_plot <- ggplot(plot_data, aes(x = posteam, y = pct, fill = result)) +
   geom_bar(stat = "identity", position = "stack", alpha = 0.85) +
   geom_nfl_logos(
     data = logo_positions,
     aes(x = posteam, y = y, team_abbr = posteam),
     inherit.aes = FALSE,
-    width = 0.05
+    width = 0.035
   ) +
   scale_fill_manual(
     name = "",
@@ -90,7 +96,7 @@ ggplot(plot_data, aes(x = posteam, y = pct, fill = result)) +
   coord_flip() +
   labs(
     title = "NFL Drive Outcomes by Team",
-    subtitle = "Percentage of drives ending in TD, FG attempt, Punt, or Turnover",
+    subtitle = sprintf("%s • Weeks 1-%s | Percentage of drives ending in TD, FG attempt, Punt, or Turnover", season_id, through_week),
     y = "Share of Drives",
     x = NULL,
     caption = "Data: nflfastR | Plot: Ward Walton"
@@ -103,6 +109,7 @@ ggplot(plot_data, aes(x = posteam, y = pct, fill = result)) +
     plot.caption = element_text(hjust = 0.5, size = 12),
     legend.position = "top"
   ) + theme(axis.text.y = element_blank())
+ggsave(file.path(out, "offense.png"), offense_plot, width = 14, height = 12, dpi = 180, bg = "white")
 
 #defense
 drive_summary <- pbp %>% filter(!is.na(defteam) & fixed_drive_result != "End of half") %>%
@@ -162,18 +169,20 @@ team_order <- drive_summary %>%
 plot_data <- plot_data %>%
   mutate(defteam = factor(defteam, levels = team_order))
 
-# logo positions (top of bars)
+# logo positions (end of TD + FG attempt segment)
 logo_positions <- plot_data %>%
   group_by(defteam) %>%
-  summarise(y = sum(pct)/2, .groups = "drop")
+  summarise(y = sum(pct[result %in% c("Touchdown", "FG Attempt")]), .groups = "drop")
 
-ggplot(plot_data, aes(x = defteam, y = pct, fill = result)) +
+write.csv(drive_summary, file.path(out, "defense.csv"), row.names = FALSE)
+
+defense_plot <- ggplot(plot_data, aes(x = defteam, y = pct, fill = result)) +
   geom_bar(stat = "identity", position = "stack", alpha = 0.85) +
   geom_nfl_logos(
     data = logo_positions,
     aes(x = defteam, y = y, team_abbr = defteam),
     inherit.aes = FALSE,
-    width = 0.05
+    width = 0.035
   ) +
   scale_fill_manual(
     name = "",
@@ -187,7 +196,7 @@ ggplot(plot_data, aes(x = defteam, y = pct, fill = result)) +
   coord_flip() +
   labs(
     title = "NFL Drive Outcomes by Team Defense",
-    subtitle = "Percentage of opponent drives ending in TD, FG attempt, Punt, or Turnover",
+    subtitle = sprintf("%s • Weeks 1-%s | Percentage of opponent drives ending in TD, FG attempt, Punt, or Turnover", season_id, through_week),
     y = "Share of Drives",
     x = NULL,
     caption = "Data: nflfastR | Plot: Ward Walton"
@@ -200,6 +209,7 @@ ggplot(plot_data, aes(x = defteam, y = pct, fill = result)) +
     plot.caption = element_text(hjust = 0.5, size = 12),
     legend.position = "top"
   ) + theme(axis.text.y = element_blank())
+ggsave(file.path(out, "defense.png"), defense_plot, width = 14, height = 12, dpi = 180, bg = "white")
 
 ###three and out rate by team
 three_and_out <- pbp %>% filter(!is.na(posteam) & fixed_drive_result != "End of half") %>%
