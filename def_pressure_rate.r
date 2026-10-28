@@ -62,6 +62,7 @@ writeLines(c(
     'Sack shading = published pressure rate times Sk / Prss; a proportional split of the rounded rate.',
     'Dashed reference = unweighted mean of team PFR rates, not a pooled league rate.',
     'Source snapshot: source_pressure.csv.',
+    'TikTok exports: def_pressure_rate_tiktok.png (1080 x 1920) and _2x.png (2160 x 3840).',
     sprintf('Recreate: Rscript def_pressure_rate.r %s %s %s', season, through_week, source_csv)
 ), file.path(out, 'README.md'))
 # Reuse downloaded logos; abbreviations keep the chart readable without them.
@@ -106,4 +107,48 @@ p <- ggplot(final, aes(y = row)) +
 if (nrow(logos)) p <- p + ggpath::geom_from_path(data = logos, aes(x = -.063, path = logo), width = .029)
 ggsave(file.path(out, 'def_pressure_rate.png'), p, width = 11, height = 14, dpi = 180, device = ragg::agg_png)
 if (interactive()) print(p)
+
+# TikTok 9:16 poster: dark surface, saturated fills (validated for CVD and contrast).
+bg <- '#0D1321'; ink <- '#F5F2EA'; muted <- '#8E99AB'; gold <- '#FFC845'
+fills <- c('Other pressures' = '#16A37A', 'Sacks' = '#F74A5C')
+tk_right <- max(final$prss_rate) + .05
+tk <- ggplot(final, aes(y = row)) +
+    annotate('rect', xmin = 0, xmax = tk_right, ymin = .4, ymax = 32.6, fill = '#141C2E') +
+    geom_rect(aes(xmin = 0, xmax = sack_rate, ymin = row - .34, ymax = row + .34, fill = 'Sacks')) +
+    geom_rect(aes(xmin = pmin(sack_rate + .0015, prss_rate), xmax = prss_rate,
+                  ymin = row - .34, ymax = row + .34, fill = 'Other pressures')) +
+    geom_vline(xintercept = league_rate, linetype = '22', color = ink, alpha = .55, linewidth = .45) +
+    annotate('text', x = league_rate, y = 33.15, label = sprintf('AVG %s', scales::percent(league_rate, accuracy = .1)),
+             color = ink, alpha = .75, size = 2.7, fontface = 'bold') +
+    # Panel-colored label boxes keep the average line from striking through values.
+    geom_label(aes(x = prss_rate + .003, label = scales::percent(prss_rate, accuracy = .1),
+                   color = rank <= 3), hjust = 0, size = 3.4, fontface = 'bold', fill = '#141C2E',
+               linewidth = 0, label.padding = unit(1.5, 'pt')) +
+    geom_text(aes(x = -.103, label = rank, color = rank <= 3), size = 3, fontface = 'bold') +
+    geom_point(aes(x = -.074), shape = 21, size = 9.6, fill = ink, color = ink, stroke = 0) +
+    geom_text(aes(x = -.052, label = team_abbr), hjust = 0, color = ink, fontface = 'bold', size = 3.1) +
+    geom_text(aes(x = tk_right + .045, label = sprintf('%s / %s', Prss, Sk)), color = muted, size = 3) +
+    annotate('text', x = tk_right + .045, y = 33.15, label = 'PRS / SK', color = muted, fontface = 'bold', size = 2.6) +
+    scale_fill_manual(NULL, values = fills, breaks = names(fills)) +
+    scale_color_manual(values = c(`TRUE` = gold, `FALSE` = ink), guide = 'none') +
+    scale_x_continuous(breaks = seq(0, tk_right, .1), labels = scales::label_percent(accuracy = 1)) +
+    scale_y_continuous(breaks = NULL) +
+    coord_cartesian(xlim = c(-.115, tk_right + .075), ylim = c(.3, 33.5), expand = FALSE, clip = 'off') +
+    labs(title = 'WHO\'S GETTING\nHOME?',
+         subtitle = sprintf('NFL defensive pressure rate  ·  %s weeks 1–%s', season, through_week),
+         x = NULL, y = NULL,
+         caption = 'Pressures include sacks; coral shows the sack share.\nSOURCE: PRO FOOTBALL REFERENCE  ·  WARD WALTON') +
+    theme_minimal(base_family = 'Arial', base_size = 11) +
+    theme(plot.background = element_rect(fill = bg, color = NA), panel.grid = element_blank(),
+          axis.text.x = element_text(color = muted, size = 9),
+          plot.title = element_text(size = 40, face = 'bold', color = ink, lineheight = .9),
+          plot.subtitle = element_text(size = 12.5, color = gold, face = 'bold', margin = margin(t = 10, b = 12)),
+          plot.caption = element_text(hjust = 0, size = 8.5, color = muted, lineheight = 1.4, margin = margin(t = 14)),
+          plot.title.position = 'plot', plot.caption.position = 'plot',
+          legend.position = 'top', legend.justification = 'left', legend.margin = margin(b = 4),
+          legend.text = element_text(size = 10.5, color = ink, face = 'bold'), legend.key.size = unit(12, 'pt'),
+          plot.margin = margin(45, 30, 45, 30))
+if (nrow(logos)) tk <- tk + ggpath::geom_from_path(data = logos, aes(x = -.074, path = logo), width = .043)
+for (s in 1:2) ggsave(file.path(out, sprintf('def_pressure_rate_tiktok%s.png', if (s == 2) '_2x' else '')), tk,
+                      width = 7.5, height = 40 / 3, dpi = 144 * s, device = ragg::agg_png)
 message('Saved chart and audit data to ', out)
