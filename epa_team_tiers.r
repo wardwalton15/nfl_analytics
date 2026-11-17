@@ -74,15 +74,18 @@ for (tm in teams$team) {
 teams$logo <- file.path(logo_dir, paste0(teams$team, '.png'))
 
 # Defensive axis is flipped so up/right always means better.
-# Single weeks use a symmetric window; date mode crops to the teams (kept square for 45° bands).
+# Single weeks use a symmetric window; date mode crops to the teams.
 if (is.na(before_date)) {
   lim <- ceiling((max(abs(c(teams$offense_epa, teams$defense_epa_allowed))) + .075) * 10) / 10
   xl <- yl <- c(-lim, lim)
 } else {
+  # Crop each axis to the teams independently so the panel has no empty margins.
   xr <- range(teams$offense_epa); yr <- range(-teams$defense_epa_allowed)
-  lim <- (max(diff(xr), diff(yr)) + .08) / 2
-  xl <- mean(xr) + c(-lim, lim); yl <- mean(yr) + c(-lim, lim)
+  xl <- xr + c(-1, 1) * diff(xr) * .09; yl <- yr + c(-1, 1) * diff(yr) * .10
 }
+# Panel height / width. The plot runs taller than wide to fill the 9:16 poster, so the tier
+# bands (net EPA = constant, drawn in data units) are steeper than 45°.
+asp <- 1.2
 break_step <- if (is.na(before_date)) .2 else .1
 clip_band <- function(poly, threshold, above) {
   if (!nrow(poly)) return(poly)
@@ -104,9 +107,11 @@ bands <- bind_rows(lapply(seq_along(tier_names), function(i) {
 }))
 
 # Deterministic collision resolution. Dots and leaders preserve true coordinates.
-anchor <- cbind(teams$offense_epa, -teams$defense_epa_allowed)
+# Works in panel units (width = 1, height = asp) because the axes have different scales.
+anchor <- cbind((teams$offense_epa - xl[1]) / diff(xl),
+                asp * (-teams$defense_epa_allowed - yl[1]) / diff(yl))
 pos <- anchor
-min_distance <- 2 * lim * .083
+min_distance <- .083
 for (iteration in 1:800) {
   pos <- pos + .012 * (anchor - pos)
   for (i in 1:(nrow(pos) - 1)) for (j in (i + 1):nrow(pos)) {
@@ -117,11 +122,11 @@ for (iteration in 1:800) {
       pos[i, ] <- pos[i, ] - push; pos[j, ] <- pos[j, ] + push
     }
   }
-  pos[, 1] <- pmax(xl[1] + min_distance / 2, pmin(xl[2] - min_distance / 2, pos[, 1]))
-  pos[, 2] <- pmax(yl[1] + min_distance / 2, pmin(yl[2] - min_distance / 2, pos[, 2]))
+  pos[, 1] <- pmax(min_distance / 2, pmin(1 - min_distance / 2, pos[, 1]))
+  pos[, 2] <- pmax(min_distance / 2, pmin(asp - min_distance / 2, pos[, 2]))
 }
-teams$logo_x <- pos[, 1]; teams$logo_y <- pos[, 2]
-teams$moved <- sqrt(rowSums((pos - anchor)^2)) > .004
+teams$logo_x <- xl[1] + pos[, 1] * diff(xl); teams$logo_y <- yl[1] + pos[, 2] / asp * diff(yl)
+teams$moved <- sqrt(rowSums((pos - anchor)^2)) > .005
 write.csv(teams |> select(team, offense_epa, defense_epa_allowed, logo_x, logo_y, moved),
           file.path(out_dir, 'logo_positions.csv'), row.names = FALSE)
 bg <- '#F7F3EA'; ink <- '#292923'; muted <- '#716E64'
@@ -142,10 +147,10 @@ plot <- ggplot() +
                      labels = scales::label_number(accuracy = .1)) +
   scale_y_continuous(breaks = seq(ceiling(yl[1] / break_step), floor(yl[2] / break_step)) * break_step,
                      labels = function(x) sprintf('%.1f', ifelse(abs(x) < 1e-8, 0, -x))) +
-  coord_fixed(xlim = xl, ylim = yl, expand = FALSE) +
+  coord_cartesian(xlim = xl, ylim = yl, expand = FALSE) +
   labs(x = 'OFFENSIVE EPA / PLAY  →', y = 'DEFENSIVE EPA / PLAY ALLOWED  →') +
   theme_minimal(base_family = 'Arial', base_size = 12) +
-  theme(plot.background = element_rect(fill = bg, color = NA),
+  theme(aspect.ratio = asp, plot.background = element_rect(fill = bg, color = NA),
         panel.grid.minor = element_blank(), panel.grid.major = element_blank(),
         panel.border = element_rect(fill = NA, color = '#C7C0B1', linewidth = .5),
         axis.text = element_text(color = muted, size = 11),
@@ -161,29 +166,29 @@ draw_poster <- function(path, scale = 1) {
     grid.text(label, x, y, just = just,
               gp = gpar(fontfamily = 'Arial', fontsize = size, col = color, fontface = face))
   }
-  grid.roundrect(x = .205, y = .928, width = .29, height = .029,
+  grid.roundrect(x = .205, y = .940, width = .29, height = .029,
                  r = unit(.008, 'npc'), gp = gpar(fill = '#2E7058', col = NA))
   badge <- if (is.na(before_date)) sprintf('%s  /  WEEK %02d', season_id, week_id) else
     sprintf('ENTERING %s', toupper(format(before_date, '%b %d')))
-  txt(badge, .205, .928, 13, bg, 'bold', 'center')
-  txt('NFL TEAM TIERS', .06, .855, 38, face = 'bold')
-  grid.lines(x = c(.06, .92), y = c(.802, .802), gp = gpar(col = '#C7C0B1', lwd = 1))
-  txt('EPA / PLAY', .065, .779, 12, face = 'bold')
-  txt('BETTER TEAMS  ↗', .92, .779, 12, '#2E7058', 'bold', 'right')
-  print(plot, newpage = FALSE, vp = viewport(x = .485, y = .515, width = .90, height = .515))
-  txt('TIERS BY NET EPA / PLAY', .065, .237, 12, face = 'bold')
+  txt(badge, .205, .940, 13, bg, 'bold', 'center')
+  txt('NFL TEAM TIERS', .06, .885, 38, face = 'bold')
+  grid.lines(x = c(.06, .92), y = c(.842, .842), gp = gpar(col = '#C7C0B1', lwd = 1))
+  txt('EPA / PLAY', .065, .822, 12, face = 'bold')
+  txt('BETTER TEAMS  ↗', .92, .822, 12, '#2E7058', 'bold', 'right')
+  print(plot, newpage = FALSE, vp = viewport(x = .485, y = .5, width = .93, height = .62))
+  txt('TIERS BY NET EPA / PLAY', .065, .172, 12, face = 'bold')
   for (j in 1:5) {
     i <- 6 - j; x <- .065 + (j - 1) * .175
-    grid.roundrect(x = x + .079, y = .192, width = .162, height = .027,
+    grid.roundrect(x = x + .079, y = .136, width = .162, height = .027,
                    r = unit(.005, 'npc'), gp = gpar(fill = band_colors[i], col = NA))
-    txt(tier_names[i], x + .079, .192, 9.8, tier_colors[i], 'bold', 'center')
+    txt(tier_names[i], x + .079, .136, 9.8, tier_colors[i], 'bold', 'center')
     fmt <- function(v) sub('-', '−', sprintf('%+.2f', v))
     label <- if (i == 1) paste('<', fmt(cuts[2])) else if (i == 5) paste('≥', fmt(cuts[5])) else
       paste(fmt(cuts[i]), 'to', fmt(cuts[i + 1]))
-    txt(label, x + .079, .167, 9, muted, just = 'center')
+    txt(label, x + .079, .112, 9, muted, just = 'center')
   }
-  txt('SOURCE: NFLVERSE', .065, .108, 11, muted, 'bold')
-  txt('WARD WALTON', .92, .108, 11, muted, 'bold', 'right')
+  txt('SOURCE: NFLVERSE', .065, .062, 11, muted, 'bold')
+  txt('WARD WALTON', .92, .062, 11, muted, 'bold', 'right')
   dev.off()
 }
 draw_poster(file.path(out_dir, 'epa_team_tiers_tiktok.png'))
